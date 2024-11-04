@@ -33,8 +33,6 @@ training_args="$base_training_args \
 --output_dir $output_dir \
 --percentage $percentage \
 --data_seed $data_seed \
---device $device \
---n_gpu $n_gpu \
 --train_files ${train_files[@]} 2>&1 | tee $output_dir/train.log"
 
 eval "$header" "$training_args"

@@ -26,13 +26,16 @@ os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 
 def main():
-    parser = HfArgumentParser(
-        (ModelArguments, DataArguments, TrainingArguments))
+    parser = HfArgumentParser((ModelArguments, DataArguments, TrainingArguments))
+
     if len(sys.argv) == 2 and sys.argv[1].endswith(".json"):
         model_args, data_args, training_args = parser.parse_json_file(
             json_file=os.path.abspath(sys.argv[1]))
     else:
         model_args, data_args, training_args = parser.parse_args_into_dataclasses()
+
+    training_args.n_gpu = 1
+    training_args.device = 'cuda:2'
 
     # Setup logging
     logging.basicConfig(
