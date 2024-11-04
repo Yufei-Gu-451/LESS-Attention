@@ -7,6 +7,8 @@ model_path=$2
 percentage=$3
 data_seed=$4
 job_name=$5
+device=$6
+n_gpu=$7
 
 output_dir=../out/${job_name}
 if [[ ! -d $output_dir ]]; then
@@ -14,9 +16,10 @@ if [[ ! -d $output_dir ]]; then
 fi
 
 train_files=("$data_dir/train/processed/flan_v2/flan_v2_data.jsonl"
-    "$data_dir/train/processed/cot/cot_data.jsonl"
-    "$data_dir/train/processed/dolly/dolly_data.jsonl"
-"$data_dir/train/processed/oasst1/oasst1_data.jsonl")
+             "$data_dir/train/processed/cot/cot_data.jsonl"
+             "$data_dir/train/processed/dolly/dolly_data.jsonl"
+             "$data_dir/train/processed/oasst1/oasst1_data.jsonl"
+)
 
 # use fsdp for large models
 if [[ $model_path == "meta-llama/Llama-2-13b-hf" ]]; then
@@ -30,6 +33,8 @@ training_args="$base_training_args \
 --output_dir $output_dir \
 --percentage $percentage \
 --data_seed $data_seed \
---train_files ${train_files[@]} 2>&1 | tee $output_dir/train.log"
+--device $device \
+--n_gpu $n_gpu \
+--train_files ${train_files[@]} 2>&1 | tee $output_dir/train.log \"
 
 eval "$header" "$training_args"
